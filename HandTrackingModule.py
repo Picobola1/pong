@@ -2,6 +2,7 @@ import cv2 as cv
 import numpy as np
 import mediapipe as mp
 import random
+import time
 
 
 cap = cv.VideoCapture(0)
@@ -10,10 +11,6 @@ mpHands = mp.solutions.hands
 hands = mpHands.Hands()# defult parmeters
 
 
-
-
-# run a web cam and anything while web cam is still going
-while True:
    
     success, img = cap.read()
     flipped_img = cv.flip(img, 1) # Flip horizontally
@@ -50,3 +47,16 @@ while True:
     key = cv.waitKey(1) & 0xFF
     if key == ord('q'):   # press q to quit
         break
+
+def main()
+    pTime = 0
+    cTime = 0
+    while True:
+        success, img = cap.read()
+        cTime = time.time()
+        fps = 1 / (cTime - pTime)
+        pTime = cTime
+        cv.putText(flipped_img,str(int(fps)), (10,70), cv.FONT_HERSHEY_PLAIN, 3, (255,0,255), 3 )
+
+if __name__ == "__main__":
+    main()
