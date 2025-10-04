@@ -50,6 +50,7 @@ def main():
     detector = handDetector()
     while True:
         success, img = cap.read()
+        img = cv.flip(img, 1)
 
         img = detector.findHands(img)
         cTime = time.time()
