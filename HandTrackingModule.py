@@ -4,6 +4,7 @@ import mediapipe as mp
 import random
 import time
 
+
 class handDetector():
     def __init__(self, mode=False,maxHands = 2, detectionCon = 0.5, trackCon = 0.5):
         # make object and each object will have its own variable
