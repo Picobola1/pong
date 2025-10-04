@@ -11,6 +11,9 @@ pTime = 0
 cTime = 0
 cap = cv.VideoCapture(0)
 detector = htm.handDetector()
+
+tipIds = [4,8,12,16,20]
+
 while True:
     success, img = cap.read()
     img = cv.flip(img, 1)
@@ -18,10 +21,14 @@ while True:
     lmList = detector.findPosition(img)
     #if hand is there
     if len(lmList) != 0:
-        if lmList[8][2] < lmList[6][2]:
-            print("index finger is open")
-        else:
-            print("index finger is closes")
+
+        for id in range(0,5):
+
+            if lmList[tipIds[id]][2] < lmList[tipIds[id] - 2][2]:
+                print("all fingers are open")
+            else:
+                print("all fingers closes IN FIST")
+           
         
    
     
