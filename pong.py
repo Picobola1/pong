@@ -4,6 +4,7 @@ import mediapipe as mp
 import random
 import time
 import HandTrackingModule as htm 
+import os
 
 
 pTime = 0
@@ -15,13 +16,15 @@ while True:
     img = cv.flip(img, 1)
     img = detector.findHands(img)
     lmList = detector.findPosition(img)
+    #if hand is there
     if len(lmList) != 0:
-        print(lmList[8])
+        if lmList[8][2] < lmList[6][2]:
+            print("index finger is open")
+        else:
+            print("index finger is closes")
+        
    
-    cTime = time.time()
-    fps = 1 / (cTime - pTime)
-    pTime = cTime
-    cv.putText(img,str(int(fps)), (10,70), cv.FONT_HERSHEY_PLAIN, 3, (255,0,255), 3 )
+    
     cv.imshow(" Image", img)
     key = cv.waitKey(1) & 0xFF
     if key == ord('q'):   # press q to quit
