@@ -12,63 +12,56 @@ class handDetector():
         self.detectionCon = detectionCon
         self.trackCon = trackCon
         self.mpHands = mp.solutions.hands 
-        self.hands = self.mpHands.Hands(self.mode,self.maxHands,self.detectionCon, self.trackCon)# defult parmeters
+        self.hands = self.mpHands.Hands(
+            static_image_mode=self.mode,
+            max_num_hands=self.maxHands,
+            min_detection_confidence=self.detectionCon,
+            min_tracking_confidence=self.trackCon
+            )# defult parmeters
         self.mpDraw = mp.solutions.drawing_utils
 
     def findHands(self,img,draw = True):
 
-        imgRgb = cv.cvtColor(flipped_img, cv.COLOR_BGR2RGB)
-        results = self.hands.process(imgRgb)
+        imgRgb = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+        self.results = self.hands.process(imgRgb)
 
-        if results.multi_hand_landmarks:
+        if self.results.multi_hand_landmarks:
         #get info from each hand/ loops thru each hand
-            for handLms in results.multi_hand_landmarks:
+            for handLms in self.results.multi_hand_landmarks:
                 if draw:
-                    self.mpDraw.draw_landmarks(flipped_img, handLms, self.mpHands.HAND_CONNECTIONS)
+                    self.mpDraw.draw_landmarks(img, handLms, self.mpHands.HAND_CONNECTIONS)
                 # for id, lm in enumerate(handLms.landmark):
                 #     #print(id,lm)
                 #     h, w, c = img.shape
                 #     cx, cy = int(lm.x*w), int(lm.y*h)
-                #     cv.circle(flipped_img, (cx,cy), 5, (255,255,255), cv.FILLED)
+                #     cv.circle(img, (cx,cy), 5, (255,255,255), cv.FILLED)
                 # #print(id, cx, cy)
                 # #if id == 8:
+        return img
 
 
-cap = cv.VideoCapture(0)
-success, img = cap.read()
-
-
-
-   
-    success, img = cap.read()
-    flipped_img = cv.flip(img, 1) # Flip horizontally
-    window_h, window_w, c = flipped_img.shape
-    
-    
-    
-    
-   
-
-        
-    #print(CoinRangeX,CoinRangeY)
 
     
-                     
 
-    cv.imshow(" Image", flipped_img)
-    key = cv.waitKey(1) & 0xFF
-    if key == ord('q'):   # press q to quit
-        break
-
-def main()
+def main():
     pTime = 0
     cTime = 0
+    cap = cv.VideoCapture(0)
+    detector = handDetector()
     while True:
         success, img = cap.read()
+
+        img = detector.findHands(img)
         cTime = time.time()
         fps = 1 / (cTime - pTime)
         pTime = cTime
-        cv.putText(flipped_img,str(int(fps)), (10,70), cv.FONT_HERSHEY_PLAIN, 3, (255,0,255), 3 )
+        cv.putText(img,str(int(fps)), (10,70), cv.FONT_HERSHEY_PLAIN, 3, (255,0,255), 3 )
+        cv.imshow(" Image", img)
+        key = cv.waitKey(1) & 0xFF
+        if key == ord('q'):   # press q to quit
+            break
+    cap.release()
+    cv.destroyAllWindows()
 
 if __name__ == "__main__":
     main()
