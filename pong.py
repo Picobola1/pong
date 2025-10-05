@@ -83,28 +83,14 @@ while True:
                                     
     if (ball_x - 15 <= left_cx + 33 and left_cy <= ball_y <= left_cy + 114):
         ball_speedx *= -1
+        ball_speedx += 1
         points += 1 
     if (ball_x + 15 >= right_cx and right_cy <= ball_y <= right_cy + 118):
         ball_speedx *= -1
         points += 1 
+        ball_speedx += 1
     
 
-              
-
-
-
-
-
-
-
-                        
-                                    
-                                    
-
-                        
-           
-        
-   
     
     cv.imshow(" Image", img)
     key = cv.waitKey(1) & 0xFF
