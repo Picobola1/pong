@@ -22,6 +22,7 @@ h, w, c = img.shape
 ball_x, ball_y = w // 2, h // 2
 left_cx, left_cy = 0, 0
 right_cx, right_cy = 0, 0
+points = 0
 
 
 
@@ -35,7 +36,7 @@ while True:
     middle_x = w // 2
     middle_y = h // 2
     
-    
+    cv.putText(img,"Points: " + str(points), (10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
     
     cv.line(img, (middle_x, 0), (middle_x, h), (0, 1, 0), 2)
     ball_x += ball_speedx
@@ -72,16 +73,20 @@ while True:
                                     left_cx, left_cy = cx, cy
                                     
                                     
+                                    
                                 if paddleSpawn == True and HandSide == "Right":
                                     cx = middle_x + paddleBack
                                     cx = np.clip(cx, 0, w - 33)
                                     cy = np.clip(cy, 0, h - 118)
                                     img[cy:cy+118, cx:cx+33] = paddle2
                                     right_cx, right_cy = cx, cy
+                                    
     if (ball_x - 15 <= left_cx + 33 and left_cy <= ball_y <= left_cy + 114):
         ball_speedx *= -1
+        points += 1 
     if (ball_x + 15 >= right_cx and right_cy <= ball_y <= right_cy + 118):
         ball_speedx *= -1
+        points += 1 
     
 
               
