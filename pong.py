@@ -66,19 +66,25 @@ while True:
                                 paddleSpawn = True
                                 if paddleSpawn == True and HandSide == "Left":
                                     cx = middle_x - paddleBack
+                                    cx = np.clip(cx, 0, w - 33)
+                                    cy = np.clip(cy, 0, h - 118)
                                     img[cy:cy+114, cx:cx+33] = paddle1
                                     left_cx, left_cy = cx, cy
                                     
                                     
                                 if paddleSpawn == True and HandSide == "Right":
                                     cx = middle_x + paddleBack
+                                    cx = np.clip(cx, 0, w - 33)
+                                    cy = np.clip(cy, 0, h - 118)
                                     img[cy:cy+118, cx:cx+33] = paddle2
                                     right_cx, right_cy = cx, cy
     if (ball_x - 15 <= left_cx + 33 and left_cy <= ball_y <= left_cy + 114):
         ball_speedx *= -1
     if (ball_x + 15 >= right_cx and right_cy <= ball_y <= right_cy + 118):
         ball_speedx *= -1
-                                    
+    
+
+              
 
 
 
