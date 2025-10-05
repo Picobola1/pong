@@ -19,17 +19,16 @@ paddleBack = 250
 
 while True:
     
-
-    
-
     success, img = cap.read()
     img = cv.flip(img, 1)
-    img = detector.findHands(img)
+    img = detector.findHands(img, draw=False)
 
     h, w, c = img.shape
     middle_x = w // 2
+    middle_y = h // 2
 
     cv.line(img, (middle_x, 0), (middle_x, h), (0, 255, 0), 2)
+    cv.circle(img,(middle_x,middle_y),15 , (255,255,255), -1)
 
     if detector.results.multi_hand_landmarks:
         for i in range(len(detector.results.multi_hand_landmarks)):
