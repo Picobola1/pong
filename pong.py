@@ -15,6 +15,7 @@ paddle1 = cv.imread("paddle1.png", cv.IMREAD_COLOR)
 paddle2 = cv.imread("paddle2.png", cv.IMREAD_COLOR)
 paddleSpawn = False
 tipIds = [4,8,12,16,20]
+paddleBack = 250
 
 while True:
     
@@ -47,9 +48,11 @@ while True:
                             if id == 6:
                                 paddleSpawn = True
                                 if paddleSpawn == True and HandSide == "Left":
+                                    cx = middle_x - paddleBack
                                     img[cy:cy+114, cx:cx+33] = paddle1
                                     
                                 if paddleSpawn == True and HandSide == "Right":
+                                    cx = middle_x + paddleBack
                                     img[cy:cy+118, cx:cx+33] = paddle2
                                     
 
