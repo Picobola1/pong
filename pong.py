@@ -14,6 +14,7 @@ detector = htm.handDetector()
 paddle1 = cv.imread("paddle1.png", cv.IMREAD_COLOR)
 paddle2 = cv.imread("paddle2.png", cv.IMREAD_COLOR)
 coinImg = cv.imread("Coin.jpg", cv.IMREAD_COLOR)
+HalfCircle = cv.imread("HalfCircle.png", cv.IMREAD_COLOR)
 CoinSpawingSquareSize = 10
 paddleSpawn = False
 tipIds = [4,8,12,16,20]
@@ -26,7 +27,8 @@ h, w, c = img.shape
 ball_x, ball_y = w // 2, h // 2
 left_cx, left_cy = 0, 0
 right_cx, right_cy = 0, 0
-points = 0
+Lpoints = 0
+Rpoints = 0
 BallSize = 15
 CoinsToSpawn = 5
 
@@ -37,7 +39,7 @@ for i in range(CoinsToSpawn):
     coins.append((CoinRangeX,CoinRangeY))
 
 while True:
-    
+    HandSide = None
     success, img = cap.read()
     img = cv.flip(img, 1)
     img = detector.findHands(img, draw=False)
@@ -46,7 +48,8 @@ while True:
     middle_x = w // 2
     middle_y = h // 2
     
-    cv.putText(img,"Coins: " + str(points), (10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
+    cv.putText(img,"Right Coins: " + str(Rpoints), (middle_x + 10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
+    cv.putText(img,"Left Coins: " + str(Lpoints), (10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
     
     cv.line(img, (middle_x, 0), (middle_x, h), (0, 1, 0), 2)
     ball_x += ball_speedx
@@ -56,7 +59,7 @@ while True:
     if ball_x <= 0 or ball_x >= w - 15:
         #cap.release()
         #cv.destroyAllWindows()
-        ball_speedy *= -1
+        ball_speedx *= -1
         #print("you should have ded")
     
     if ball_y <= 0 or ball_y >= h - 15:
@@ -71,7 +74,8 @@ while True:
             ball_y + BallSize > CoinRangeY and
             ball_y - BallSize < CoinRangeY + CoinH):
             del coins[i]
-            points += 5
+            Rpoints += 5
+            Lpoints += 5
 
 
 
@@ -88,9 +92,12 @@ while True:
                 #print(distanceX)     
                 # abs() turns it into a absolute value, wich means turining it positive
                 if abs(distanceX) < 10 and abs(distanceY) < 10:
-                    print(abs(distanceX),abs(distanceY))
-                    ball_x, ball_y = w // 2, h // 2
-                    cv.circle(img, (int(ball_x), int(ball_y)), BallSize, (255,255,255), -1)
+                    if HandSide == "Left":
+                        print("Should Have Done Left")
+                        cv.rectangle(img,(middle_x,0),(w,h), (255,255,255), -1)
+                    if HandSide == "Right":
+                        print("Should Have Done Right")
+                        cv.rectangle(img,(0,0),(middle_x,h), (255,255,255), -1)
                 for id in range(0,5): 
 
                     #all fingers open
@@ -120,11 +127,16 @@ while True:
                                     
     if (ball_x - 15 <= left_cx + 33 and left_cy <= ball_y <= left_cy + 114):
         ball_speedx *= -1
-        
-        points += 1 
+        if HandSide == "Left":
+            Lpoints += 1 
+        else:
+            Rpoints += 1
     if (ball_x + 15 >= right_cx and right_cy <= ball_y <= right_cy + 118):
         ball_speedx *= -1
-        points += 1 
+        if HandSide == "Left":
+            Lpoints += 1 
+        else:
+            Rpoints += 1
     
 
         
