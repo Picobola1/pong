@@ -44,7 +44,9 @@ while True:
 
     cv.circle(img, (int(ball_x), int(ball_y)), 15, (255,255,255), -1)
     if ball_x <= 0 or ball_x >= w - 15:
-        ball_speedx *= -1
+        cap.release()
+        cv.destroyAllWindows()
+    
     if ball_y <= 0 or ball_y >= h - 15:
         ball_speedy *= -1
         
