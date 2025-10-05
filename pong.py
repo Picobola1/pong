@@ -36,7 +36,11 @@ while True:
     ball_y += ball_speedy
 
     cv.circle(img, (int(ball_x), int(ball_y)), 15, (255,255,255), -1)
-    
+    if ball_x <= 0 or ball_x >= w - 15:
+        ball_speedx *= -1
+    if ball_y <= 0 or ball_y >= h - 15:
+        ball_speedy *= -1
+
 
     if detector.results.multi_hand_landmarks:
         for i in range(len(detector.results.multi_hand_landmarks)):
