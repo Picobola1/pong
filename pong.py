@@ -20,6 +20,10 @@ ball_speedx, ball_speedy = 5, 5
 success, img = cap.read()
 h, w, c = img.shape
 ball_x, ball_y = w // 2, h // 2
+left_cx, left_cy = 0, 0
+right_cx, right_cy = 0, 0
+
+
 
 while True:
     
@@ -31,6 +35,8 @@ while True:
     middle_x = w // 2
     middle_y = h // 2
     
+    
+    
     cv.line(img, (middle_x, 0), (middle_x, h), (0, 1, 0), 2)
     ball_x += ball_speedx
     ball_y += ball_speedy
@@ -40,7 +46,7 @@ while True:
         ball_speedx *= -1
     if ball_y <= 0 or ball_y >= h - 15:
         ball_speedy *= -1
-
+        
 
     if detector.results.multi_hand_landmarks:
         for i in range(len(detector.results.multi_hand_landmarks)):
@@ -61,10 +67,27 @@ while True:
                                 if paddleSpawn == True and HandSide == "Left":
                                     cx = middle_x - paddleBack
                                     img[cy:cy+114, cx:cx+33] = paddle1
+                                    left_cx, left_cy = cx, cy
+                                    
                                     
                                 if paddleSpawn == True and HandSide == "Right":
                                     cx = middle_x + paddleBack
                                     img[cy:cy+118, cx:cx+33] = paddle2
+                                    right_cx, right_cy = cx, cy
+    if (ball_x - 15 <= left_cx + 33 and left_cy <= ball_y <= left_cy + 114):
+        ball_speedx *= -1
+    if (ball_x + 15 >= right_cx and right_cy <= ball_y <= right_cy + 118):
+        ball_speedx *= -1
+                                    
+
+
+
+
+
+
+
+                        
+                                    
                                     
 
                         
