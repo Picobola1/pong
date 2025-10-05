@@ -16,6 +16,10 @@ paddle2 = cv.imread("paddle2.png", cv.IMREAD_COLOR)
 paddleSpawn = False
 tipIds = [4,8,12,16,20]
 paddleBack = 250
+ball_speedx, ball_speedy = 5, 5
+success, img = cap.read()
+h, w, c = img.shape
+ball_x, ball_y = w // 2, h // 2
 
 while True:
     
@@ -26,9 +30,13 @@ while True:
     h, w, c = img.shape
     middle_x = w // 2
     middle_y = h // 2
+    
+    cv.line(img, (middle_x, 0), (middle_x, h), (0, 1, 0), 2)
+    ball_x += ball_speedx
+    ball_y += ball_speedy
 
-    cv.line(img, (middle_x, 0), (middle_x, h), (0, 255, 0), 2)
-    cv.circle(img,(middle_x,middle_y),15 , (255,255,255), -1)
+    cv.circle(img, (int(ball_x), int(ball_y)), 15, (255,255,255), -1)
+    
 
     if detector.results.multi_hand_landmarks:
         for i in range(len(detector.results.multi_hand_landmarks)):
