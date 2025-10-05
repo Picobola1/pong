@@ -36,7 +36,7 @@ while True:
     middle_x = w // 2
     middle_y = h // 2
     
-    cv.putText(img,"Points: " + str(points), (10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
+    cv.putText(img,"Coins: " + str(points), (10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
     
     cv.line(img, (middle_x, 0), (middle_x, h), (0, 1, 0), 2)
     ball_x += ball_speedx
@@ -44,8 +44,10 @@ while True:
 
     cv.circle(img, (int(ball_x), int(ball_y)), 15, (255,255,255), -1)
     if ball_x <= 0 or ball_x >= w - 15:
-        cap.release()
-        cv.destroyAllWindows()
+        #cap.release()
+        #cv.destroyAllWindows()
+        ball_speedy *= -1
+        #print("you should have ded")
     
     if ball_y <= 0 or ball_y >= h - 15:
         ball_speedy *= -1
@@ -57,10 +59,23 @@ while True:
         #if hand is there
             if len(lmList) != 0:
                 HandSide = detector.results.multi_handedness[i].classification[0].label
-                for id in range(0,5):
-                    if lmList[tipIds[id]][2] < lmList[tipIds[id] - 2][2]:
+                x1, y1 = lmList[4][1], lmList[4][2]
+                x2, y2 = lmList[8][1], lmList[8][2]
+                cv.line(img,(x1,y1), (x2, y2), (0,255,255), 5)
+                distanceX, distanceY = x1 - x2, y1 - y2
+                #print(distanceX)     
+                # abs() turns it into a absolute value, wich means turining it positive
+                if abs(distanceX) < 10 and abs(distanceY) < 10:
+                    print(abs(distanceX),abs(distanceY))
+                    ball_x, ball_y = w // 2, h // 2
+                    cv.circle(img, (int(ball_x), int(ball_y)), 15, (255,255,255), -1)
+                for id in range(0,5): 
+
+                    #all fingers open
+                    if lmList[tipIds[id]][2] < lmList[tipIds[id] - 3][2]:
                         paddleSpawn = False
                     else:
+                        #fingers are closed in a fist
                         for id, lm in enumerate(lmList):
                             h, w, c = img.shape
                             cx, cy = lmList[14][1], lmList[14][2]
@@ -74,8 +89,6 @@ while True:
                                     img[cy:cy+114, cx:cx+33] = paddle1
                                     left_cx, left_cy = cx, cy
                                     
-                                    
-                                    
                                 if paddleSpawn == True and HandSide == "Right":
                                     cx = middle_x + paddleBack
                                     cx = np.clip(cx, 0, w - 33)
@@ -85,12 +98,16 @@ while True:
                                     
     if (ball_x - 15 <= left_cx + 33 and left_cy <= ball_y <= left_cy + 114):
         ball_speedx *= -1
-        ball_speedx += 1
+        
         points += 1 
     if (ball_x + 15 >= right_cx and right_cy <= ball_y <= right_cy + 118):
         ball_speedx *= -1
         points += 1 
-        ball_speedx += 1
+    for i in range(points):
+        if points >= 20:
+            ball_speedx += 1
+
+        
     
 
     
