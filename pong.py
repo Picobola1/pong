@@ -13,8 +13,12 @@ cap = cv.VideoCapture(0)
 detector = htm.handDetector()
 paddle1 = cv.imread("paddle1.png", cv.IMREAD_COLOR)
 paddle2 = cv.imread("paddle2.png", cv.IMREAD_COLOR)
+coinImg = cv.imread("Coin.jpg", cv.IMREAD_COLOR)
+CoinSpawingSquareSize = 10
 paddleSpawn = False
 tipIds = [4,8,12,16,20]
+resizeCoin = cv.resize(coinImg, (25,25))
+CoinH, CoinW = resizeCoin.shape[:2]
 paddleBack = 250
 ball_speedx, ball_speedy = 5, 5
 success, img = cap.read()
@@ -23,8 +27,14 @@ ball_x, ball_y = w // 2, h // 2
 left_cx, left_cy = 0, 0
 right_cx, right_cy = 0, 0
 points = 0
+BallSize = 15
+CoinsToSpawn = 5
 
-
+coins = []
+for i in range(CoinsToSpawn):
+    CoinRangeX = random.randint(0, h - CoinSpawingSquareSize- 25)
+    CoinRangeY = random.randint(0, w - CoinSpawingSquareSize - 25)
+    coins.append((CoinRangeX,CoinRangeY))
 
 while True:
     
@@ -42,7 +52,7 @@ while True:
     ball_x += ball_speedx
     ball_y += ball_speedy
 
-    cv.circle(img, (int(ball_x), int(ball_y)), 15, (255,255,255), -1)
+    cv.circle(img, (int(ball_x), int(ball_y)), BallSize, (255,255,255), -1)
     if ball_x <= 0 or ball_x >= w - 15:
         #cap.release()
         #cv.destroyAllWindows()
@@ -51,7 +61,11 @@ while True:
     
     if ball_y <= 0 or ball_y >= h - 15:
         ball_speedy *= -1
-        
+
+    for (CoinRangeX,CoinRangeY) in coins:
+        coin_rect = (CoinRangeX, CoinRangeY, CoinRangeX + CoinW, CoinRangeY + CoinH)        
+        img[CoinRangeY:CoinRangeY+CoinH, CoinRangeX:CoinRangeX+CoinW] = resizeCoin
+
 
     if detector.results.multi_hand_landmarks:
         for i in range(len(detector.results.multi_hand_landmarks)):
@@ -68,7 +82,7 @@ while True:
                 if abs(distanceX) < 10 and abs(distanceY) < 10:
                     print(abs(distanceX),abs(distanceY))
                     ball_x, ball_y = w // 2, h // 2
-                    cv.circle(img, (int(ball_x), int(ball_y)), 15, (255,255,255), -1)
+                    cv.circle(img, (int(ball_x), int(ball_y)), BallSize, (255,255,255), -1)
                 for id in range(0,5): 
 
                     #all fingers open
@@ -103,9 +117,7 @@ while True:
     if (ball_x + 15 >= right_cx and right_cy <= ball_y <= right_cy + 118):
         ball_speedx *= -1
         points += 1 
-    for i in range(points):
-        if points >= 20:
-            ball_speedx += 1
+    
 
         
     
