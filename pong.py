@@ -32,8 +32,8 @@ CoinsToSpawn = 5
 
 coins = []
 for i in range(CoinsToSpawn):
-    CoinRangeX = random.randint(0, h - CoinSpawingSquareSize- 25)
-    CoinRangeY = random.randint(0, w - CoinSpawingSquareSize - 25)
+    CoinRangeX = random.randint(0, w - CoinW - 50)
+    CoinRangeY = random.randint(0, h - CoinH - 50)
     coins.append((CoinRangeX,CoinRangeY))
 
 while True:
@@ -65,6 +65,14 @@ while True:
     for (CoinRangeX,CoinRangeY) in coins:
         coin_rect = (CoinRangeX, CoinRangeY, CoinRangeX + CoinW, CoinRangeY + CoinH)        
         img[CoinRangeY:CoinRangeY+CoinH, CoinRangeX:CoinRangeX+CoinW] = resizeCoin
+    for  i ,(CoinRangeX, CoinRangeY) in enumerate(coins):
+        if (ball_x + BallSize > CoinRangeX and
+            ball_x - BallSize < CoinRangeX + CoinW and
+            ball_y + BallSize > CoinRangeY and
+            ball_y - BallSize < CoinRangeY + CoinH):
+            del coins[i]
+            points += 5
+
 
 
     if detector.results.multi_hand_landmarks:
