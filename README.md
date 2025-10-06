@@ -1,4 +1,8 @@
 This is a Open CV project. I made this following a mixtue of tutorials from FreeCodeCamp and other places that i dont remeber.
 
 This game is inted to be played 1 player or 2 player. Do note that when you play 2 player you will need to you your right hand for the right side and left for the left side. 
-To control the paddles you make your hand into a fist and the paddles will apear. Move your fists up and down to control them
+To control the paddles you make your hand into a fist and the paddles will apear. Move your fists up and down to control them.
+
+The Line from your index finger to your thumb helps you see the distance when the distance is small (keep moving your fingers around till it happens sometimes it buggs) it will make the side of the screen for the other player/ side white so that they can not see. 
+
+Nothing happens when te ball goes behind the paddle, it wil just end up bouncing somewhere else. The goal is to hit the ball the most times before the timer runs out.
