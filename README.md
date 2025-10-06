@@ -9,9 +9,14 @@ Nothing happens when te ball goes behind the paddle, it wil just end up bouncing
 
 Coins if you hit a coin with the ball both players get 5 coins.
 
+
 <img width="928" height="749" alt="image" src="https://github.com/user-attachments/assets/783e5d38-5d4f-4eab-8f1b-7ce243c6363b" />
 
+# BUGS
 If the window gets stuck press q
+
+If no camera shows that is beacuse it is programed to use your laptop camera, if you really want to play it you can go into the code and change this line 
+cap = cv.VideoCapture(0) to something like cap = cv.VideoCapture(1) or 2 this will use your external camera.
 
 
 
