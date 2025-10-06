@@ -36,6 +36,8 @@ CoinsToSpawn = 5
 start_timer = time.time()
 gameDuration = 30
 end_timer = start_timer + gameDuration
+ball_trail = []
+trail_lenght = 10
 
 
 coins = []
@@ -43,11 +45,14 @@ for i in range(CoinsToSpawn):
     CoinRangeX = random.randint(0, w - CoinW - 50)
     CoinRangeY = random.randint(0, h - CoinH - 50)
     coins.append((CoinRangeX,CoinRangeY))
-ws.PlaySound("backround-music.wav", ws.SND_ASYNC)
+ws.PlaySound("backround-music.wav", ws.SND_ASYNC | ws.SND_LOOP)
+
 
 while True:
     
-    
+    ball_trail.append((ball_x,ball_y))
+    if len(ball_trail) > trail_lenght:
+        ball_trail.pop(0)
 
     time_left = int(end_timer - time.time())
     
@@ -69,6 +74,11 @@ while True:
         ball_y += ball_speedy
 
     cv.circle(img, (int(ball_x), int(ball_y)), BallSize, (255,255,255), -1)
+    for i, (tx,ty) in enumerate(ball_trail):
+        alpha = i / len(ball_trail)
+        radius = int(10 * alpha)
+        color = (0, int(255 * alpha), 255 - int(255 * alpha))
+        cv.circle(img, (tx,ty), radius, color, -1)
     if ball_x <= 0 or ball_x >= w - 15:
         #cap.release()
         #cv.destroyAllWindows()
@@ -139,7 +149,9 @@ while True:
                                     cy = np.clip(cy, 0, h - 118)
                                     img[cy:cy+118, cx:cx+33] = paddle2
                                     right_cx, right_cy = cx, cy
-                                    
+
+    
+
     if (ball_x - 15 <= left_cx + 33 and left_cy <= ball_y <= left_cy + 114):
         ball_speedx *= -1
         if HandSide == "Left":
