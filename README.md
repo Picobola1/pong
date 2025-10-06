@@ -18,7 +18,12 @@ If the window gets stuck press q
 If no camera shows that is beacuse it is programed to use your laptop camera, if you really want to play it you can go into the code and change this line 
 cap = cv.VideoCapture(0) to something like cap = cv.VideoCapture(1) or 2 this will use your external camera.
 
+If your hands arent showing try going inside someweher and trying again sometimes the cant tell hands when the lighting is a lil bit wierd
+
 If you are running this of of vs code you need the open-cv, mediapipe, random, time, numbpy, HandTrackingModule (my custom modlue), and winsound.<img width="484" height="303" alt="image" src="https://github.com/user-attachments/assets/afdc6e86-d049-4de0-8a41-e56f6584da6c" />
+
+# Notes 
+This game can be SUPER BUGGY so like idk 
 
 
 
