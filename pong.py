@@ -5,6 +5,8 @@ import random
 import time
 import HandTrackingModule as htm 
 import os
+import time
+
 
 
 pTime = 0
@@ -31,6 +33,10 @@ Lpoints = 0
 Rpoints = 0
 BallSize = 15
 CoinsToSpawn = 5
+start_timer = time.time()
+gameDuration = 5
+end_timer = start_timer + gameDuration
+
 
 coins = []
 for i in range(CoinsToSpawn):
@@ -39,6 +45,9 @@ for i in range(CoinsToSpawn):
     coins.append((CoinRangeX,CoinRangeY))
 
 while True:
+    
+    time_left = int(end_timer - time.time())
+    
     HandSide = None
     success, img = cap.read()
     img = cv.flip(img, 1)
@@ -93,10 +102,10 @@ while True:
                 # abs() turns it into a absolute value, wich means turining it positive
                 if abs(distanceX) < 10 and abs(distanceY) < 10:
                     if HandSide == "Left":
-                        print("Should Have Done Left")
+                        #print("Should Have Done Left")
                         cv.rectangle(img,(middle_x,0),(w,h), (255,255,255), -1)
                     if HandSide == "Right":
-                        print("Should Have Done Right")
+                        #print("Should Have Done Right")
                         cv.rectangle(img,(0,0),(middle_x,h), (255,255,255), -1)
                 for id in range(0,5): 
 
@@ -138,14 +147,30 @@ while True:
         else:
             Rpoints += 1
     
-
-        
+   
+    end_time = time.time()
+    elapsed_time = end_time - start_timer
+    
+    
+    cv.putText(img, f"Time Left: {time_left}s", (middle_x - 100, 50),
+           cv.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+    if time_left <= 0:
+        cv.rectangle(img, (0,0), (w,h), (0,0,0), -1)
+        if Lpoints > Rpoints:
+            cv.putText(img,"Left Wins!!", (middle_x - 200,middle_y), cv.FONT_HERSHEY_PLAIN, 2 , (0,255,0), 2)
+        else:
+            cv.putText(img,"Right Wins!!", (middle_x - 200,middle_y), cv.FONT_HERSHEY_PLAIN, 2 , (0,255,0), 2)
+        cv.putText(img,"Right Coins: " + str(Rpoints), (middle_x + 10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
+        cv.putText(img,"Left Coins: " + str(Lpoints), (10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
     
 
-    
-    cv.imshow(" Image", img)
+
+
+
+    cv.imshow("Video", img)
     key = cv.waitKey(1) & 0xFF
     if key == ord('q'):   # press q to quit
         break
+    
 cap.release()
 cv.destroyAllWindows()
