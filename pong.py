@@ -4,8 +4,8 @@ import mediapipe as mp
 import random
 import time
 import HandTrackingModule as htm 
-import os
 import time
+import winsound as ws
 
 
 
@@ -34,7 +34,7 @@ Rpoints = 0
 BallSize = 15
 CoinsToSpawn = 5
 start_timer = time.time()
-gameDuration = 5
+gameDuration = 30
 end_timer = start_timer + gameDuration
 
 
@@ -43,9 +43,12 @@ for i in range(CoinsToSpawn):
     CoinRangeX = random.randint(0, w - CoinW - 50)
     CoinRangeY = random.randint(0, h - CoinH - 50)
     coins.append((CoinRangeX,CoinRangeY))
+ws.PlaySound("backround-music.wav", ws.SND_ASYNC)
 
 while True:
     
+    
+
     time_left = int(end_timer - time.time())
     
     HandSide = None
@@ -61,8 +64,9 @@ while True:
     cv.putText(img,"Left Coins: " + str(Lpoints), (10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
     
     cv.line(img, (middle_x, 0), (middle_x, h), (0, 1, 0), 2)
-    ball_x += ball_speedx
-    ball_y += ball_speedy
+    if time_left > 0:
+        ball_x += ball_speedx
+        ball_y += ball_speedy
 
     cv.circle(img, (int(ball_x), int(ball_y)), BallSize, (255,255,255), -1)
     if ball_x <= 0 or ball_x >= w - 15:
@@ -83,6 +87,7 @@ while True:
             ball_y + BallSize > CoinRangeY and
             ball_y - BallSize < CoinRangeY + CoinH):
             del coins[i]
+            ws.PlaySound("coin-sound.wav", ws.SND_ASYNC)
             Rpoints += 5
             Lpoints += 5
 
@@ -121,6 +126,7 @@ while True:
                             if id == 6:
                                 paddleSpawn = True
                                 if paddleSpawn == True and HandSide == "Left":
+                
                                     cx = middle_x - paddleBack
                                     cx = np.clip(cx, 0, w - 33)
                                     cy = np.clip(cy, 0, h - 118)
@@ -138,14 +144,18 @@ while True:
         ball_speedx *= -1
         if HandSide == "Left":
             Lpoints += 1 
+            ws.PlaySound("bonk.wav", ws.SND_ASYNC)
         else:
+            ws.PlaySound("bonk.wav", ws.SND_ASYNC)
             Rpoints += 1
     if (ball_x + 15 >= right_cx and right_cy <= ball_y <= right_cy + 118):
         ball_speedx *= -1
         if HandSide == "Left":
+            ws.PlaySound("bonk.wav", ws.SND_ASYNC)
             Lpoints += 1 
         else:
             Rpoints += 1
+            ws.PlaySound("bonk.wav", ws.SND_ASYNC)
     
    
     end_time = time.time()
@@ -154,14 +164,17 @@ while True:
     
     cv.putText(img, f"Time Left: {time_left}s", (middle_x - 100, 50),
            cv.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+    
     if time_left <= 0:
+        final_L = Lpoints
+        final_R = Rpoints
         cv.rectangle(img, (0,0), (w,h), (0,0,0), -1)
-        if Lpoints > Rpoints:
-            cv.putText(img,"Left Wins!!", (middle_x - 200,middle_y), cv.FONT_HERSHEY_PLAIN, 2 , (0,255,0), 2)
+        if final_L > final_R:
+            cv.putText(img,"Left Wins!!", (middle_x - 100,middle_y), cv.FONT_HERSHEY_PLAIN, 2 , (0,255,0), 2)
         else:
-            cv.putText(img,"Right Wins!!", (middle_x - 200,middle_y), cv.FONT_HERSHEY_PLAIN, 2 , (0,255,0), 2)
-        cv.putText(img,"Right Coins: " + str(Rpoints), (middle_x + 10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
-        cv.putText(img,"Left Coins: " + str(Lpoints), (10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
+            cv.putText(img,"Right Wins!!", (middle_x - 100,middle_y), cv.FONT_HERSHEY_PLAIN, 2 , (0,255,0), 2)
+        cv.putText(img,"Right Coins: " + str(final_R), (middle_x + 10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
+        cv.putText(img,"Left Coins: " + str(final_L), (10,70), cv.FONT_HERSHEY_PLAIN, 2, (0,255,255), 2)
     
 
 
