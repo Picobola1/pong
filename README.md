@@ -5,4 +5,13 @@ To control the paddles you make your hand into a fist and the paddles will apear
 
 The Line from your index finger to your thumb helps you see the distance when the distance is small (keep moving your fingers around till it happens sometimes it buggs) it will make the side of the screen for the other player/ side white so that they can not see. 
 
-Nothing happens when te ball goes behind the paddle, it wil just end up bouncing somewhere else. The goal is to hit the ball the most times before the timer runs out.
+Nothing happens when te ball goes behind the paddle, it wil just end up bouncing somewhere else. The goal is to hit the ball the most times before the timer runs out. When the timer runs out it will show you who won.
+
+Coins if you hit a coin with the ball both players get 5 coins.
+
+<img width="928" height="749" alt="image" src="https://github.com/user-attachments/assets/783e5d38-5d4f-4eab-8f1b-7ce243c6363b" />
+
+If the window gets stuck press q
+
+
+
